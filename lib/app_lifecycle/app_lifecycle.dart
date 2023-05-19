@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 
 class AppLifecycleObserver extends StatefulWidget {
   final Widget child;
@@ -26,7 +27,12 @@ class _AppLifecycleObserverState extends State<AppLifecycleObserver>
     super.didChangeAppLifecycleState(state);
 
     lifecycleListenable.value = state;
-
+    if (state == AppLifecycleState.resumed) {
+      Wakelock.enable();
+    } else if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Wakelock.disable();
+    }
     // final isBackground = state == AppLifecycleState.paused;
     // final isDetached = state == AppLifecycleState.detached;
     // final isObscured = state == AppLifecycleState.inactive;
@@ -43,6 +49,5 @@ class _AppLifecycleObserverState extends State<AppLifecycleObserver>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-   
   }
 }

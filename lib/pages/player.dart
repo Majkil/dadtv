@@ -12,11 +12,14 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   late VideoPlayerController videoController;
+  bool isLandscape = false;
+  bool isPlaying = true;
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    //SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+
     loadVideoPlayer();
   }
 
@@ -24,20 +27,64 @@ class _PlayerState extends State<Player> {
   void dispose() {
     super.dispose();
     videoController.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    SystemChrome.restoreSystemUIOverlays();
   }
 
+  String keybaordinput = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: VideoPlayer(videoController))),
+    Size outputSize = getOptimalRatio(MediaQuery.of(context).size);
+
+    Widget player = RawKeyboardListener(
+      autofocus: true,
+      focusNode: FocusNode(),
+      onKey: (event) {
+        if (event is RawKeyDownEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+            scanForward();
+          } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+            scanBack();
+          }
+        }
+      },
+      child: GestureDetector(
+          onTap: togglePlayPause,
+          child: Center(child: VideoPlayer(videoController))),
     );
+    return Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          child: SizedBox(
+              width: outputSize.width,
+              height: outputSize.height,
+              child: isLandscape
+                  ? Stack(
+                      children: [
+                        player,
+                      ],
+                    )
+                  : Center(
+                      child: player,
+                    )),
+        ));
   }
 
-  loadVideoPlayer() {
+  Size getOptimalRatio(Size size) {
+    if (size.width > size.height) {
+      setState(() {
+        isLandscape = true;
+      });
+      return Size((size.height / 9) * 16, size.height);
+    } else {
+      setState(() {
+        isLandscape = false;
+      });
+      return Size(size.width, (size.width / 16) * 9);
+    }
+  }
+
+  void loadVideoPlayer() {
     videoController = VideoPlayerController.network(widget.streamUrl);
     videoController.addListener(() {
       setState(() {});
@@ -46,5 +93,29 @@ class _PlayerState extends State<Player> {
       setState(() {});
     });
     videoController.play();
+  }
+
+  void togglePlayPause() {
+    if (isPlaying) {
+      isPlaying = !isPlaying;
+      videoController.pause();
+    } else {
+      isPlaying = !isPlaying;
+      videoController.play();
+    }
+  }
+
+  void scanBack() {
+    videoController.position.then((value) => setState(() {
+          keybaordinput = value!.inSeconds.toString();
+          videoController.seekTo(Duration(seconds: value.inSeconds - 15));
+        }));
+  }
+
+  void scanForward() {
+    videoController.position.then((value) => setState(() {
+          keybaordinput = value!.inSeconds.toString();
+          videoController.seekTo(Duration(seconds: value.inSeconds + 15));
+        }));
   }
 }
