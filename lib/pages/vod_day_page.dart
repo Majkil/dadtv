@@ -1,47 +1,100 @@
+
 import 'package:dadtv/pages/vod_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 import '../services/one_vod.dart';
 
-class VoDDayPage extends StatefulWidget {
-  final DateTime? day;
-  const VoDDayPage({super.key, this.day});
+class OneVodDayPicker extends StatefulWidget {
+  final DateTime day;
+  const OneVodDayPicker({super.key, required this.day});
 
   @override
-  State<VoDDayPage> createState() => _VoDDayPageState();
+  State<OneVodDayPicker> createState() => _OneVodDayPickerState();
 }
 
-class _VoDDayPageState extends State<VoDDayPage> {
-  DateTime? currentDay;
+class _OneVodDayPickerState extends State<OneVodDayPicker> {
+  OneVoDService service = OneVoDService();
+  List<Episode> playlist = [];
+  bool panning = false;
+  bool panLeft = true;
+  @override
+  void initState() {
+    super.initState();
+    currentDay = widget.day;
+    getEpisodes();
+  }
+
+  late DateTime currentDay;
   @override
   Widget build(BuildContext context) {
-    currentDay ??= widget.day ?? DateTime.now();
-    return RawKeyboardListener(
-        focusNode: FocusNode(),
-        onKey: (value) {
-          if (value.logicalKey == LogicalKeyboardKey.arrowLeft) {
+    return GestureDetector(
+      onPanStart: (v) {
+        setState(() {
+          panning = true;
+        });
+      },
+      onPanUpdate: (event) {
+        // print(event.delta);
+        print(event.delta.direction);
+      },
+      onPanEnd: (v) {
+        setState(() {
+          panning = false;
+          if (panLeft) {
             yesterday();
-          }
-          if (value.logicalKey == LogicalKeyboardKey.arrowRight) {
+          } else {
             tomorrow();
           }
-        },
-        child: VoDSelector(vodDay: currentDay!));
+        });
+      },
+      child: RawKeyboardListener(
+          focusNode: FocusNode(),
+          onKey: (value) => handleKeyEvent(value),
+          child: Scaffold(
+              appBar: AppBar(
+                elevation: 4,
+                title: Text(currentDay.toString().split(' ')[0]),
+              ),
+              body: VoDSelector(
+                vodDay: currentDay,
+                playlist: playlist,
+              ))),
+    );
   }
 
   yesterday() {
     setState(() {
-      currentDay = currentDay!.subtract(const Duration(days: 1));
+      currentDay = currentDay.subtract(const Duration(days: 1));
+      getEpisodes();
     });
-    context.watch<OneVoDService>().getDayEpisodes(currentDay!);
   }
 
   tomorrow() {
     setState(() {
-      currentDay = currentDay!.add(const Duration(days: 1));
+      currentDay = currentDay.add(const Duration(days: 1));
+      getEpisodes();
     });
-    context.watch<OneVoDService>().getDayEpisodes(currentDay!);
+  }
+
+  handleKeyEvent(RawKeyEvent event) {
+    if (event.runtimeType == RawKeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        yesterday();
+      }
+      if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        tomorrow();
+      }
+    }
+  }
+
+  getEpisodes() {
+    service.getDayEpisodes(currentDay).then((value) => {
+          setState(
+            () {
+              playlist = value;
+            },
+          )
+        });
   }
 }

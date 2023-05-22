@@ -12,7 +12,7 @@ class StreamUrlService extends ChangeNotifier {
 
   StreamUrlService() {
     getTVM();
-    // getOne();
+    getOne();
     // getNet();
   }
   getTVM() {
@@ -41,8 +41,10 @@ class StreamUrlService extends ChangeNotifier {
 
   getOne() {
     var dio = Dio();
-
-    dio.get('https://tvmi.mt/live/3').then((value) {});
+    playlist.value.putIfAbsent(
+        "One",
+        () =>
+            "https://2-fss-1.streamhoster.com/pl_148/amlst:201830-1293592/playlist.m3u8");
   }
 
   getNet() {

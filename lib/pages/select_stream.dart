@@ -63,7 +63,8 @@ class _ChannelSelectionState extends State<ChannelSelection> {
                 elevation: 5,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
-                onPressed: () => GoRouter.of(context).push('/vod'),
+                onPressed: () => GoRouter.of(context)
+                    .push('/onevod', extra: {'day': DateTime.now()}),
                 child: const Text("Video on Demand"),
               ),
             )

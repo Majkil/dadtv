@@ -51,8 +51,13 @@ GoRouter appRouter = GoRouter(routes: [
       builder: (context, state) => const ChannelSelection(),
       routes: [
         GoRoute(
-          path: 'vod',
-          builder: (context, state) => const VoDDayPage(),
+          path: 'onevod',
+          builder: (context, state) {
+            DateTime date = (state.extra as Map)['day'] as DateTime;
+            return OneVodDayPicker(
+              day: date,
+            );
+          },
         ),
         GoRoute(
             path: 'play',
