@@ -1,5 +1,6 @@
 import 'package:dadtv/services/one_vod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,7 @@ class VoDPreviewTile extends StatelessWidget {
     var orientation = MediaQuery.of(context).orientation;
 
     if (orientation == Orientation.landscape) {
+      // landscape
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -150,20 +152,34 @@ class VoDPreviewTile extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: MaterialButton(
-            padding: EdgeInsets.all(0),
-            clipBehavior: Clip.hardEdge,
-            focusColor: Colors.amber,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            color: canPlay ? Colors.white : Colors.red.shade200,
-            onPressed: () {
-              if (videoUrl!.isNotEmpty) {
-                GoRouter.of(context).go('/play', extra: {'url': videoUrl});
-              }
-            },
-            child: getOrientationDependantTile(context)),
+        child: RawKeyboardListener(
+          focusNode: FocusNode(),
+          onKey: (keyEvent) {
+            if (keyEvent.runtimeType == RawKeyUpEvent &&
+                keyEvent.logicalKey == LogicalKeyboardKey.select &&
+                videoUrl!.isNotEmpty) {
+              handlePress(context);
+            }
+          },
+          child: MaterialButton(
+              padding: const EdgeInsets.all(0),
+              clipBehavior: Clip.hardEdge,
+              focusColor: Colors.amber,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+              color: canPlay ? Colors.white : Colors.red.shade200,
+              onPressed: () {
+                if (videoUrl!.isNotEmpty) {
+                  handlePress(context);
+                }
+              },
+              child: getOrientationDependantTile(context)),
+        ),
       ),
     );
+  }
+
+  handlePress(context) {
+    GoRouter.of(context).go('/play', extra: {'url': videoUrl});
   }
 }

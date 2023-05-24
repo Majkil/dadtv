@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:dadtv/components/big_buttons.dart';
 import 'package:dadtv/services/stream_url_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +16,7 @@ class _ChannelSelectionState extends State<ChannelSelection> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-    var playlist = context.watch<StreamUrlService>().playlist;
+    var playlist = context.watch<StreamUrlService>().streams;
     return Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
@@ -27,32 +26,23 @@ class _ChannelSelectionState extends State<ChannelSelection> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4),
           children: [
-            for (var x in playlist.value.keys)
+            for (var x in playlist.value)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  clipBehavior: Clip.hardEdge,
-                  onPressed: () =>
-                      context.go('/play', extra: {'url': playlist.value[x]!}),
-                  child: Stack(
-                      fit: StackFit.loose,
-                      clipBehavior: Clip.hardEdge,
-                      children: [
-                        Center(child: Text(x)),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Transform.rotate(
-                            angle: -pi / 4,
-                            child: const Padding(
-                              padding: EdgeInsets.only(bottom: 8.0, left: 8.0),
-                              child: Text(
-                                'Live',
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ),
-                        )
-                      ]),
+                child: RawKeyboardListener(
+                  onKey: (key) {
+                    if (key.runtimeType == RawKeyUpEvent) {
+                      if (key.logicalKey == LogicalKeyboardKey.select) {
+                        context.go('/play', extra: {'url': x.url});
+                      }
+                    }
+                  },
+                  focusNode: FocusNode(),
+                  child: BigButton(
+                    url: x.url,
+                    text: x.title,
+                    imgUrl: x.imgUrl,
+                  ),
                 ),
               ),
             Padding(

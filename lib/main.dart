@@ -8,6 +8,7 @@ import 'package:dadtv/services/one_vod.dart';
 import 'package:dadtv/services/stream_url_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -71,13 +72,11 @@ GoRouter appRouter = GoRouter(routes: [
 ]);
 
 ThemeData appTheme(context) => ThemeData(
-    scaffoldBackgroundColor: Colors.black54,
-    elevatedButtonTheme:
-        ElevatedButtonThemeData(style: appButtonStyle(context)),
-    filledButtonTheme: FilledButtonThemeData(style: appButtonStyle(context)),
-    buttonTheme: ButtonThemeData(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))));
+      scaffoldBackgroundColor: Colors.black54,
+      elevatedButtonTheme:
+          ElevatedButtonThemeData(style: appButtonStyle(context)),
+      filledButtonTheme: FilledButtonThemeData(style: appButtonStyle(context)),
+    );
 
 ButtonStyle appButtonStyle(context) => ButtonStyle(
     foregroundColor: MaterialStateProperty.all(Colors.black),
@@ -86,6 +85,9 @@ ButtonStyle appButtonStyle(context) => ButtonStyle(
     backgroundColor:
         MaterialStateProperty.all<Color>(Colors.redAccent.shade200),
     overlayColor: MaterialStateProperty.all<Color>(Colors.amber),
-    textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
-        fontSize: ResponsiveSizer.of(context).fontSize(4),
-        fontWeight: FontWeight.bold)));
+    textStyle: MaterialStateProperty.all<TextStyle>(
+        GoogleFonts.robotoCondensed().copyWith(
+            fontSize: ResponsiveSizer.of(context).fontSize(4),
+            fontWeight: FontWeight.bold)));
+
+TextTheme tt = GoogleFonts.robotoCondensedTextTheme();

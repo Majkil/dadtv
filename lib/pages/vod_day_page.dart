@@ -1,4 +1,3 @@
-
 import 'package:dadtv/pages/vod_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +34,12 @@ class _OneVodDayPickerState extends State<OneVodDayPicker> {
         });
       },
       onPanUpdate: (event) {
+        if (event.delta.dx > 0) {
+          panLeft = false;
+        }
+        if (event.delta.dx < 0) {
+          panLeft = true;
+        }
         // print(event.delta);
         print(event.delta.direction);
       },
