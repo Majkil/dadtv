@@ -15,50 +15,62 @@ class ChannelSelection extends StatefulWidget {
 class _ChannelSelectionState extends State<ChannelSelection> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     var playlist = context.watch<StreamUrlService>().streams;
     return Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4),
-          children: [
-            for (var x in playlist.value)
+        body: SafeArea(
+          child: GridView(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4),
+            children: [
+              for (var x in playlist.value)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RawKeyboardListener(
+                    onKey: (key) {
+                      if (key.runtimeType == RawKeyUpEvent) {
+                        if (key.logicalKey == LogicalKeyboardKey.select) {
+                          context.go('/play', extra: {'url': x.url});
+                        }
+                      }
+                    },
+                    focusNode: FocusNode(),
+                    child: BigButton(
+                      url: x.url,
+                      text: x.title,
+                      imgUrl: x.imgUrl,
+                    ),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RawKeyboardListener(
+                  focusNode: FocusNode(),
                   onKey: (key) {
                     if (key.runtimeType == RawKeyUpEvent) {
                       if (key.logicalKey == LogicalKeyboardKey.select) {
-                        context.go('/play', extra: {'url': x.url});
+                        context.go('/onevod', extra: {'day': DateTime.now()});
                       }
                     }
                   },
-                  focusNode: FocusNode(),
-                  child: BigButton(
-                    url: x.url,
-                    text: x.title,
-                    imgUrl: x.imgUrl,
+                  child: MaterialButton(
+                    focusColor: Colors.amber,
+                    color: Colors.red.shade100,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    onPressed: () => GoRouter.of(context)
+                        .push('/onevod', extra: {'day': DateTime.now()}),
+                    child: const Text("Video on Demand"),
                   ),
                 ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MaterialButton(
-                focusColor: Colors.amber,
-                color: Colors.red.shade100,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-                onPressed: () => GoRouter.of(context)
-                    .push('/onevod', extra: {'day': DateTime.now()}),
-                child: const Text("Video on Demand"),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ));
   }
 }

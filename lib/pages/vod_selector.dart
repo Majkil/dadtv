@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class VoDSelector extends StatefulWidget {
   final DateTime vodDay;
@@ -73,7 +72,6 @@ class VoDPreviewTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          //image
           SizedBox(
             height: 100,
             width: 300,
@@ -82,31 +80,65 @@ class VoDPreviewTile extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          // title , duration and genre
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          //row flexible
+          Flexible(
+            child: Flex(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              direction: Axis.horizontal,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                // image
+                // title , duration and genre
+                // column flexible
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 3,
+                  child: Flex(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    direction: Axis.vertical,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            Text('$duration mins'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                Text('${duration}mins'),
+                //start time
+                Flexible(
+                  fit: FlexFit.tight,
+                  flex: 1,
+                  child: Flex(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    direction: Axis.vertical,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(DateFormat('dd MMMM').format(startDateTime!)),
+                          Text(DateFormat(DateFormat.HOUR24_MINUTE)
+                              .format(startDateTime!)),
+                          Text(genre),
+                        ],
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-          //start time
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(DateFormat(DateFormat.HOUR24_MINUTE).format(startDateTime!)),
-              Text(genre)
-            ],
-          )
         ],
       );
     } else {

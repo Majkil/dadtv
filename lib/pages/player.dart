@@ -18,7 +18,7 @@ class _PlayerState extends State<Player> {
   void initState() {
     super.initState();
     //SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     loadVideoPlayer();
   }
@@ -27,7 +27,7 @@ class _PlayerState extends State<Player> {
   void dispose() {
     super.dispose();
     videoController.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.restoreSystemUIOverlays();
   }
 

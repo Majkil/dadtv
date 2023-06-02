@@ -40,8 +40,7 @@ class _OneVodDayPickerState extends State<OneVodDayPicker> {
         if (event.delta.dx < 0) {
           panLeft = true;
         }
-        // print(event.delta);
-        print(event.delta.direction);
+    
       },
       onPanEnd: (v) {
         setState(() {

@@ -90,4 +90,4 @@ ButtonStyle appButtonStyle(context) => ButtonStyle(
             fontSize: ResponsiveSizer.of(context).fontSize(4),
             fontWeight: FontWeight.bold)));
 
-TextTheme tt = GoogleFonts.robotoCondensedTextTheme();
+TextTheme tt = GoogleFonts.jostTextTheme();
