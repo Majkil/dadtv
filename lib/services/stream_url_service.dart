@@ -1,4 +1,5 @@
 import 'package:dadtv/models/stream_source.dart';
+import 'package:dadtv/services/smashtv.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class StreamUrlService extends ChangeNotifier {
   StreamUrlService() {
     getTVM();
     getOne();
+    getSmash();
     //getNet();
   }
   getTVM() {
@@ -78,5 +80,13 @@ class StreamUrlService extends ChangeNotifier {
       streams.value.add(StreamSource(title: "Net", url: source!));
       notifyListeners();
     });
+  }
+
+  void getSmash() {
+    var stv = SmashTvService();
+    var temp = stv.getPlaylist();
+
+    temp.then((x) => {streams.value.addAll(x)});
+    notifyListeners();
   }
 }

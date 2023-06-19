@@ -5,6 +5,7 @@ import 'package:dadtv/pages/player.dart';
 import 'package:dadtv/pages/select_stream.dart';
 import 'package:dadtv/pages/vod_day_page.dart';
 import 'package:dadtv/services/one_vod.dart';
+import 'package:dadtv/services/smashtv.dart';
 import 'package:dadtv/services/stream_url_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,10 @@ import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
+  // var tempUrl = UpdaterService().checkForNewVersion();
 }
 
 class MyApp extends StatelessWidget {
@@ -33,6 +37,10 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<OneVoDService>(
             create: (context) => OneVoDService(),
             lazy: false,
+          ),
+          ChangeNotifierProvider<SmashTvService>(
+            create: (context) => SmashTvService(),
+            lazy: false,
           )
         ],
             child: MaterialApp.router(
@@ -49,7 +57,10 @@ class MyApp extends StatelessWidget {
 GoRouter appRouter = GoRouter(routes: [
   GoRoute(
       path: '/',
-      builder: (context, state) => const ChannelSelection(),
+      builder: (context, state) => ChannelSelection(
+        key: GlobalKey(),
+          playlistTest: context.watch<StreamUrlService>().streams,
+          showExtras: true),
       routes: [
         GoRoute(
           path: 'onevod',
@@ -59,6 +70,12 @@ GoRouter appRouter = GoRouter(routes: [
               day: date,
             );
           },
+        ),
+        GoRoute(
+          path: 'smashchannels',
+          builder: (context, state) => ChannelSelection(
+              showExtras: false,
+              playlistTest: context.watch<SmashTvService>().smashPlaylist),
         ),
         GoRoute(
             path: 'play',

@@ -46,6 +46,8 @@ class _PlayerState extends State<Player> {
           } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
             scanBack();
           }
+        } else if (event.logicalKey == LogicalKeyboardKey.select) {
+          togglePlayPause();
         }
       },
       child: GestureDetector(
