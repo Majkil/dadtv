@@ -12,7 +12,7 @@ class Updater extends StatefulWidget {
 }
 
 class _UpdaterState extends State<Updater> {
-  late OtaEvent currentEvent;
+  OtaEvent currentEvent = OtaEvent(OtaStatus.DOWNLOADING, '');
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
     packageName: 'Unknown',
@@ -25,7 +25,7 @@ class _UpdaterState extends State<Updater> {
   @override
   void initState() {
     super.initState();
-    // tryOtaUpdate();
+    tryOtaUpdate();
     _initPackageInfo();
   }
 
@@ -47,7 +47,7 @@ class _UpdaterState extends State<Updater> {
       //LINK CONTAINS APK OF FLUTTER HELLO WORLD FROM FLUTTER SDK EXAMPLES
       OtaUpdate()
           .execute(
-        "https://github.com/Majkil/dadtv/releases/download/first/app-release.apk",
+        "https://github.com/Majkil/dadtv/releases/latest/download/app-release.apk",
         // OPTIONAL
         destinationFilename: 'app-release.apk',
         //OPTIONAL, ANDROID ONLY - ABILITY TO VALIDATE CHECKSUM OF FILE:
@@ -74,8 +74,13 @@ class _UpdaterState extends State<Updater> {
         child: Column(
           children: [
             Text(_packageInfo.toString()),
-            // Text(
-            //     'OTA status: ${currentEvent.status} : ${currentEvent.value} \n'),
+            ElevatedButton(
+                onPressed: () => tryOtaUpdate(), child: const Text('Update')),
+            if (currentEvent != null)
+              Text(
+                'OTA status: ${currentEvent.status} : ${currentEvent.value} \n',
+                style: TextStyle(color: Colors.white),
+              ),
           ],
         ),
       ),

@@ -44,6 +44,11 @@ class ChannelSelection extends StatelessWidget {
                 ActionButton(
                     onPressed: () => GoRouter.of(context).push('/'),
                     btnText: "Back"),
+              if (showExtras)
+                ActionButton(
+                    onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Updater())),
+                    btnText: "Update"),
             ],
           ),
         ));
