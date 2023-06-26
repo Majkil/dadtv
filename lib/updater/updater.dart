@@ -1,6 +1,5 @@
-// IMPORT PACKAGE
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -25,7 +24,7 @@ class _UpdaterState extends State<Updater> {
   @override
   void initState() {
     super.initState();
-    tryOtaUpdate();
+    // tryOtaUpdate();
     _initPackageInfo();
   }
 
@@ -74,9 +73,19 @@ class _UpdaterState extends State<Updater> {
         child: Column(
           children: [
             Text(_packageInfo.toString()),
-            ElevatedButton(
-                onPressed: () => tryOtaUpdate(), child: const Text('Update')),
-            if (currentEvent != null)
+            RawKeyboardListener(
+                focusNode: FocusNode(skipTraversal: true),
+                onKey: (key) {
+                  if (key.runtimeType == RawKeyUpEvent) {
+                    if (key.logicalKey == LogicalKeyboardKey.select) {
+                      tryOtaUpdate();
+                    }
+                  }
+                },
+                child: ElevatedButton(
+                    onPressed: () => tryOtaUpdate(),
+                    child: const Text('Update'))),
+            if (currentEvent.value!.isNotEmpty)
               Text(
                 'OTA status: ${currentEvent.status} : ${currentEvent.value} \n',
                 style: TextStyle(color: Colors.white),

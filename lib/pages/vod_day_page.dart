@@ -35,10 +35,10 @@ class _OneVodDayPickerState extends State<OneVodDayPicker> {
       },
       onPanUpdate: (event) {
         if (event.delta.dx > 0) {
-          panLeft = false;
+          panLeft = true;
         }
         if (event.delta.dx < 0) {
-          panLeft = true;
+          panLeft = false;
         }
     
       },
@@ -53,7 +53,7 @@ class _OneVodDayPickerState extends State<OneVodDayPicker> {
         });
       },
       child: RawKeyboardListener(
-          focusNode: FocusNode(),
+          focusNode: FocusNode(skipTraversal: true),
           onKey: (value) => handleKeyEvent(value),
           child: Scaffold(
               appBar: AppBar(

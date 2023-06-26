@@ -22,34 +22,37 @@ class ChannelSelection extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
-          child: Wrap(
-            direction: Axis.horizontal,
-            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 4),
-            children: [
-              // const Updater(),
-              ...streamTiles(playlist),
-              if (showExtras)
-                ActionButton(
-                  onPressed: () =>
-                      context.go('/onevod', extra: {'day': DateTime.now()}),
-                  btnText: 'Video on Demand',
-                ),
-              if (showExtras)
-                ActionButton(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Wrap(
+              direction: Axis.horizontal,
+              // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 4),
+              children: [
+                // const Updater(),
+                ...streamTiles(playlist),
+                if (showExtras)
+                  ActionButton(
                     onPressed: () =>
-                        GoRouter.of(context).push('/smashchannels'),
-                    btnText: "Other Smash Channels"),
-              if (!showExtras)
-                ActionButton(
-                    onPressed: () => GoRouter.of(context).push('/'),
-                    btnText: "Back"),
-              if (showExtras)
-                ActionButton(
-                    onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Updater())),
-                    btnText: "Update"),
-            ],
+                        context.go('/onevod', extra: {'day': DateTime.now()}),
+                    btnText: 'Video on Demand',
+                  ),
+                if (showExtras)
+                  ActionButton(
+                      onPressed: () =>
+                          GoRouter.of(context).push('/smashchannels'),
+                      btnText: "Other Smash Channels"),
+                if (!showExtras)
+                  ActionButton(
+                      onPressed: () => GoRouter.of(context).push('/'),
+                      btnText: "Back"),
+                if (showExtras)
+                  ActionButton(
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => Updater())),
+                      btnText: "Update"),
+              ],
+            ),
           ),
         ));
   }

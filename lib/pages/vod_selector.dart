@@ -185,7 +185,7 @@ class VoDPreviewTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RawKeyboardListener(
-          focusNode: FocusNode(),
+          focusNode: FocusNode(skipTraversal: true),
           onKey: (keyEvent) {
             if (keyEvent.runtimeType == RawKeyUpEvent &&
                 keyEvent.logicalKey == LogicalKeyboardKey.select &&
