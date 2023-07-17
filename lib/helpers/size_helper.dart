@@ -9,6 +9,18 @@ class ResponsiveSizer {
   }
 }
 
+double buttonWidth(BuildContext context, bool isLandscape) {
+  return isLandscape
+      ? MediaQuery.of(context).size.width / 5
+      : MediaQuery.of(context).size.width / 2;
+}
+
+double buttonHeight(BuildContext context, bool isLandscape) {
+  return isLandscape
+      ? MediaQuery.of(context).size.height / 5
+      : MediaQuery.of(context).size.height / 3;
+}
+
 class ScalingQuery {
   final _guidelineBaseWidth = 350;
   final _guidelineBaseHeight = 680;

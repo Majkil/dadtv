@@ -42,7 +42,7 @@ class BigButton extends StatelessWidget {
                     Text(
                       text,
                       style: GoogleFonts.robotoCondensed().copyWith(
-                        color: Colors.white,
+                          color: Colors.white,
                           fontSize: ResponsiveSizer.of(context).fontSize(2)),
                     )
                   ],
@@ -58,8 +58,7 @@ class BigButton extends StatelessWidget {
   }
 
   handlePress(context) {
-    GoRouter.of(context).push
-    ('/play', extra: {'url': url});
+    GoRouter.of(context).push('/play', extra: {'url': url});
   }
 }
 
@@ -71,9 +70,11 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isLandscape =
+        MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 3,
-      width: MediaQuery.of(context).size.width / 5,
+      height: buttonHeight(context, isLandscape),
+      width: buttonWidth(context, isLandscape),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RawKeyboardListener(

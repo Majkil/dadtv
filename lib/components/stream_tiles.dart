@@ -1,4 +1,5 @@
 import 'package:dadtv/components/big_buttons.dart';
+import 'package:dadtv/helpers/size_helper.dart';
 import 'package:dadtv/models/stream_source.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -13,10 +14,8 @@ class SteamTile extends StatelessWidget {
     var isLandscape =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 3,
-      width: isLandscape
-          ? MediaQuery.of(context).size.width / 5
-          : MediaQuery.of(context).size.width / 2,
+      height: buttonHeight(context, isLandscape),
+      width: buttonHeight(context, isLandscape),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RawKeyboardListener(

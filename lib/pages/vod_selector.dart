@@ -179,7 +179,7 @@ class VoDPreviewTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (videoUrl!.isNotEmpty) {
-          GoRouter.of(context).go('/play', extra: {'url': videoUrl});
+          GoRouter.of(context).push('/play', extra: {'url': videoUrl});
         }
       },
       child: Padding(
