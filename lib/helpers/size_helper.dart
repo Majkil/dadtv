@@ -17,8 +17,8 @@ double buttonWidth(BuildContext context, bool isLandscape) {
 
 double buttonHeight(BuildContext context, bool isLandscape) {
   return isLandscape
-      ? MediaQuery.of(context).size.height / 5
-      : MediaQuery.of(context).size.height / 3;
+      ? MediaQuery.of(context).size.height / 3
+      : MediaQuery.of(context).size.height / 5;
 }
 
 class ScalingQuery {
