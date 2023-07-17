@@ -58,7 +58,8 @@ class BigButton extends StatelessWidget {
   }
 
   handlePress(context) {
-    GoRouter.of(context).go('/play', extra: {'url': url});
+    GoRouter.of(context).push
+    ('/play', extra: {'url': url});
   }
 }
 

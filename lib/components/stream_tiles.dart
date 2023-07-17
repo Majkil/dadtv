@@ -10,22 +10,24 @@ class SteamTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isLandscape =
+        MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     return SizedBox(
       height: MediaQuery.of(context).size.height / 3,
-      width: MediaQuery.of(context).size.width /5,
+      width: isLandscape
+          ? MediaQuery.of(context).size.width / 5
+          : MediaQuery.of(context).size.width / 2,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: RawKeyboardListener(
           onKey: (key) {
             if (key.runtimeType == RawKeyUpEvent) {
               if (key.logicalKey == LogicalKeyboardKey.select) {
-                context.go('/play', extra: {'url': source.url});
+                GoRouter.of(context).push('/play', extra: {'url': source.url});
               }
             }
           },
-          focusNode: FocusNode(
-            skipTraversal: true
-          ),
+          focusNode: FocusNode(skipTraversal: true),
           child: BigButton(
             url: source.url,
             text: source.title,

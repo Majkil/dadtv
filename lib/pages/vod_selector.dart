@@ -196,7 +196,7 @@ class VoDPreviewTile extends StatelessWidget {
           child: MaterialButton(
               padding: const EdgeInsets.all(0),
               clipBehavior: Clip.hardEdge,
-              focusColor: Colors.amber,
+              focusColor: canPlay ? Colors.amber : Colors.red.shade500,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               color: canPlay ? Colors.white : Colors.red.shade200,
@@ -212,6 +212,6 @@ class VoDPreviewTile extends StatelessWidget {
   }
 
   handlePress(context) {
-    GoRouter.of(context).go('/play', extra: {'url': videoUrl});
+    GoRouter.of(context).push('/play', extra: {'url': videoUrl});
   }
 }

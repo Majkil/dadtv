@@ -55,27 +55,22 @@ class _PlayerState extends State<Player> {
           onTap: togglePlayPause,
           child: Center(child: VideoPlayer(videoController))),
     );
-    return WillPopScope(
-      onWillPop: () async {
-        return GoRouter.of(context).canPop();
-      },
-      child: Scaffold(
-          backgroundColor: Colors.black,
-          body: SafeArea(
-            child: SizedBox(
-                width: outputSize.width,
-                height: outputSize.height,
-                child: isLandscape
-                    ? Stack(
-                        children: [
-                          player,
-                        ],
-                      )
-                    : Center(
-                        child: player,
-                      )),
-          )),
-    );
+    return Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          child: SizedBox(
+              width: outputSize.width,
+              height: outputSize.height,
+              child: isLandscape
+                  ? Stack(
+                      children: [
+                        player,
+                      ],
+                    )
+                  : Center(
+                      child: player,
+                    )),
+        ));
   }
 
   Size getOptimalRatio(Size size) {

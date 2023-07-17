@@ -20,7 +20,7 @@ class _UpdaterState extends State<Updater> {
     buildSignature: 'Unknown',
     installerStore: 'Unknown',
   );
-
+  String message = '';
   @override
   void initState() {
     super.initState();
@@ -42,7 +42,10 @@ class _UpdaterState extends State<Updater> {
     // RUN OTA UPDATE
     // START LISTENING FOR DOWNLOAD PROGRESS REPORTING EVENTS
     try {
-      print('ABI Platform: ${await OtaUpdate().getAbi()}');
+      setState(() async {
+        message = 'ABI Platform: ${await OtaUpdate().getAbi()}';
+      });
+
       //LINK CONTAINS APK OF FLUTTER HELLO WORLD FROM FLUTTER SDK EXAMPLES
       OtaUpdate()
           .execute(
@@ -59,7 +62,9 @@ class _UpdaterState extends State<Updater> {
         },
       );
     } catch (e) {
-      print('Failed to make OTA update. Details: $e');
+      setState(() {
+        message = 'Failed to make OTA update. Details: $e';
+      });
     }
   }
 
@@ -88,8 +93,9 @@ class _UpdaterState extends State<Updater> {
             if (currentEvent.value!.isNotEmpty)
               Text(
                 'OTA status: ${currentEvent.status} : ${currentEvent.value} \n',
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
+            Text(message)
           ],
         ),
       ),

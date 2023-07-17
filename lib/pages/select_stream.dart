@@ -33,8 +33,8 @@ class ChannelSelection extends StatelessWidget {
                 ...streamTiles(playlist),
                 if (showExtras)
                   ActionButton(
-                    onPressed: () =>
-                        context.go('/onevod', extra: {'day': DateTime.now()}),
+                    onPressed: () => GoRouter.of(context)
+                        .push('/onevod', extra: {'day': DateTime.now()}),
                     btnText: 'Video on Demand',
                   ),
                 if (showExtras)
@@ -49,7 +49,8 @@ class ChannelSelection extends StatelessWidget {
                 if (showExtras)
                   ActionButton(
                       onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Updater())),
+                          MaterialPageRoute(
+                              builder: (context) => const Updater())),
                       btnText: "Update"),
               ],
             ),
