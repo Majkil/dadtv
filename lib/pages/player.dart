@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
@@ -14,6 +16,8 @@ class _PlayerState extends State<Player> {
   late VideoPlayerController videoController;
   bool isLandscape = false;
   bool isPlaying = true;
+  bool playerError = false;
+  String errorMessage = '';
   @override
   void initState() {
     super.initState();
@@ -34,26 +38,46 @@ class _PlayerState extends State<Player> {
   String keybaordinput = '';
   @override
   Widget build(BuildContext context) {
+    // var testConf = BetterPlayerConfiguration(autoPlay: true);
+    // var testCont = BetterPlayerController(testConf,
+    //     betterPlayerDataSource:
+    //         BetterPlayerDataSource.network(widget.streamUrl));
+    // var test = BetterPlayer(controller: testCont);
+
     Size outputSize = getOptimalRatio(MediaQuery.of(context).size);
 
-    Widget player = RawKeyboardListener(
-      autofocus: true,
-      focusNode: FocusNode(),
-      onKey: (event) {
-        if (event is RawKeyDownEvent) {
-          if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-            scanForward();
-          } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-            scanBack();
-          }
-        } else if (event.logicalKey == LogicalKeyboardKey.select) {
-          togglePlayPause();
-        }
-      },
-      child: GestureDetector(
-          onTap: togglePlayPause,
-          child: Center(child: VideoPlayer(videoController))),
-    );
+    Widget player = playerError
+        ? Center(
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Something went wrong"),
+              Text(errorMessage),
+              //test,
+            ],
+          ))
+        :
+        //      test;
+        // var bla =
+        RawKeyboardListener(
+            autofocus: true,
+            focusNode: FocusNode(),
+            onKey: (event) {
+              if (event is RawKeyDownEvent) {
+                if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+                  scanForward();
+                } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+                  scanBack();
+                }
+              } else if (event.logicalKey == LogicalKeyboardKey.select) {
+                togglePlayPause();
+              }
+            },
+            child: GestureDetector(
+                onTap: togglePlayPause,
+                child: Center(child: VideoPlayer(videoController))),
+          );
+
     return Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
@@ -87,13 +111,30 @@ class _PlayerState extends State<Player> {
   }
 
   void loadVideoPlayer() {
-    videoController = VideoPlayerController.network(widget.streamUrl);
+    videoController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.streamUrl));
+    // videoController = VideoPlayerController.network(widget.streamUrl);
+    if (widget.streamUrl.contains('.mpd')) {
+      videoController =
+          VideoPlayerController.contentUri(Uri(path: widget.streamUrl));
+    }
     videoController.addListener(() {
+      if (videoController.value.hasError) {
+        setState(() {
+          playerError = true;
+          print(widget.streamUrl);
+          errorMessage = widget.streamUrl;
+          errorMessage += Platform.lineTerminator;
+          errorMessage += videoController.value.errorDescription.toString();
+        });
+      }
       setState(() {});
     });
+
     videoController.initialize().then((v) {
       setState(() {});
     });
+
     videoController.play();
   }
 

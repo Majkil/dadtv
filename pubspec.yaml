@@ -48,6 +48,7 @@ dependencies:
   cached_network_image: ^3.2.3
   ota_update: ^5.1.0
   package_info_plus: ^3.1.2
+  better_player: ^0.0.83
 
 dev_dependencies:
   flutter_test:

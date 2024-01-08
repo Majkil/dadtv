@@ -11,8 +11,13 @@ class SteamTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var hasImg = true;
     var isLandscape =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
+
+    if (source.imgUrl == null || source.imgUrl!.isEmpty) {
+      hasImg = false;
+    }
     return SizedBox(
       height: buttonHeight(context, isLandscape),
       width: buttonHeight(context, isLandscape),
@@ -29,7 +34,7 @@ class SteamTile extends StatelessWidget {
           focusNode: FocusNode(skipTraversal: true),
           child: BigButton(
             url: source.url,
-            text: source.title,
+            text: hasImg ? '' : source.title,
             imgUrl: source.imgUrl,
           ),
         ),

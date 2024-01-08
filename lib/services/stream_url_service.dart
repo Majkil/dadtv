@@ -1,4 +1,5 @@
 import 'package:dadtv/models/stream_source.dart';
+import 'package:dadtv/services/mediaset_service.dart';
 import 'package:dadtv/services/smashtv.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class StreamUrlService extends ChangeNotifier {
     getOne();
     getSmash();
     //getNet();
+    getItalian();
   }
   getTVM() {
     var dio = Dio();
@@ -85,6 +87,14 @@ class StreamUrlService extends ChangeNotifier {
   void getSmash() {
     var stv = SmashTvService();
     var temp = stv.getPlaylist();
+
+    temp.then((x) => {streams.value.addAll(x)});
+    notifyListeners();
+  }
+
+  void getItalian() {
+    var mediaset = MediasetService();
+    var temp = mediaset.getPlaylist();
 
     temp.then((x) => {streams.value.addAll(x)});
     notifyListeners();
