@@ -1,4 +1,9 @@
+import 'package:objectbox/objectbox.dart';
+
+@Entity()
 class IptvStreamModel {
+  @Id()
+  int id;
   final String channel;
   final String feed;
   final String title;
@@ -7,7 +12,8 @@ class IptvStreamModel {
   final String userAgent;
   final String quality;
 
-  const IptvStreamModel({
+  IptvStreamModel({
+    this.id = 0,
     required this.channel,
     required this.feed,
     required this.title,

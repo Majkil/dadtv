@@ -1,4 +1,10 @@
 {
     "cmake.sourceDirectory": "C:/source/projects/dadtv/linux",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cSpell.words": [
+        "Localstore",
+        "objectbox",
+        "wakelock"
+    ],
+    "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }

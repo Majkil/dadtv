@@ -1,0 +1,176 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "2:6141506818141325021",
+      "lastPropertyId": "8:4418574192717313808",
+      "name": "IptvStreamModel",
+      "properties": [
+        {
+          "id": "1:5567038224878082864",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:703303736376503817",
+          "name": "channel",
+          "type": 9
+        },
+        {
+          "id": "3:6186362347568862007",
+          "name": "feed",
+          "type": 9
+        },
+        {
+          "id": "4:625294576537622166",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "5:427489790709137310",
+          "name": "url",
+          "type": 9
+        },
+        {
+          "id": "6:1407264553124284141",
+          "name": "referrer",
+          "type": 9
+        },
+        {
+          "id": "7:3498104272046116602",
+          "name": "userAgent",
+          "type": 9
+        },
+        {
+          "id": "8:4418574192717313808",
+          "name": "quality",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8885849303582669429",
+      "lastPropertyId": "4:5719037960318546839",
+      "name": "IptvCategoryModel",
+      "properties": [
+        {
+          "id": "1:7280134508962171799",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9146232158618219808",
+          "name": "sId",
+          "type": 9
+        },
+        {
+          "id": "3:2675874432822691774",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:5719037960318546839",
+          "name": "description",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:1233119234780525391",
+      "lastPropertyId": "11:6026141704336702879",
+      "name": "IptvChannelModel",
+      "properties": [
+        {
+          "id": "1:1840215677079603032",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2549263818677920293",
+          "name": "uid",
+          "type": 9
+        },
+        {
+          "id": "3:4784922424771731889",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:6003698768694661559",
+          "name": "altNames",
+          "type": 30
+        },
+        {
+          "id": "5:8102350413486123555",
+          "name": "network",
+          "type": 9
+        },
+        {
+          "id": "6:7867519213982361308",
+          "name": "owners",
+          "type": 30
+        },
+        {
+          "id": "7:520077301776490867",
+          "name": "country",
+          "type": 9
+        },
+        {
+          "id": "8:6581960413316595116",
+          "name": "categories",
+          "type": 30
+        },
+        {
+          "id": "9:2829662888631668524",
+          "name": "isNsfw",
+          "type": 1
+        },
+        {
+          "id": "10:6067032697470530705",
+          "name": "replacedBy",
+          "type": 9
+        },
+        {
+          "id": "11:6026141704336702879",
+          "name": "website",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:1233119234780525391",
+  "lastIndexId": "1:5466935377735778867",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    3097030686985105360
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    3314507059721966729,
+    19224298163257241,
+    2794630567938360341,
+    7919415786556083610,
+    7636260935181869570,
+    3364234047277932831,
+    8807615531739619767,
+    1307835606071389221,
+    2762255916643283722,
+    8509523171982464100,
+    1702290633519257503,
+    7823198736590497810,
+    901263577084690309
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

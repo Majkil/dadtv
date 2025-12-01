@@ -18,7 +18,7 @@ class StreamUrlService extends ChangeNotifier {
     getOne();
     getSmash();
     //getNet();
-    getItalian();
+    //getItalian();
   }
   getTVM() {
     var dio = Dio();

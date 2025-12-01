@@ -5,6 +5,7 @@ import 'package:dadtv/pages/iptv_git_list_page.dart';
 import 'package:dadtv/pages/player.dart';
 import 'package:dadtv/pages/select_stream.dart';
 import 'package:dadtv/pages/vod_day_page.dart';
+import 'package:dadtv/services/db_service.dart';
 import 'package:dadtv/services/one_vod.dart';
 import 'package:dadtv/services/smashtv.dart';
 import 'package:dadtv/services/stream_url_service.dart';
@@ -14,9 +15,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+late DbService dbService;
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  dbService = await DbService.create();
   runApp(const MyApp());
   // var tempUrl = UpdaterService().checkForNewVersion();
 }
