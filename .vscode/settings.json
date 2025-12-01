@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/source/repos/Projects/dadtv/linux"
+    "cmake.sourceDirectory": "C:/source/projects/dadtv/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

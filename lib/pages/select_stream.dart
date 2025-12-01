@@ -31,6 +31,10 @@ class ChannelSelection extends StatelessWidget {
               children: [
                 // const Updater(),
                 ...streamTiles(playlist),
+                 ActionButton(
+                      onPressed: () =>
+                          GoRouter.of(context).push('/iptv'),
+                      btnText: "iptv"),
                 if (showExtras)
                   ActionButton(
                     onPressed: () => GoRouter.of(context)
