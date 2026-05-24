@@ -144,9 +144,43 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:3850227890706146305",
+      "lastPropertyId": "5:5972756512529464006",
+      "name": "IptvCountry",
+      "properties": [
+        {
+          "id": "1:5719105448771380973",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6317690747607176048",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3021508313401402499",
+          "name": "code",
+          "type": 9
+        },
+        {
+          "id": "4:6069239099486392256",
+          "name": "languages",
+          "type": 30
+        },
+        {
+          "id": "5:5972756512529464006",
+          "name": "flag",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:1233119234780525391",
+  "lastEntityId": "5:3850227890706146305",
   "lastIndexId": "1:5466935377735778867",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

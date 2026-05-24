@@ -1,11 +1,12 @@
 import 'package:dadtv/models/iptv_streams_model.dart';
+import 'package:dadtv/services/db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../services/iptv_git_service.dart';
 
 class IptvGitListPage extends StatefulWidget {
-  const IptvGitListPage({Key? key}) : super(key: key);
+  const IptvGitListPage({super.key});
 
   @override
   _IptvGitListPageState createState() => _IptvGitListPageState();
@@ -31,15 +32,16 @@ class _IptvGitListPageState extends State<IptvGitListPage> {
       if (!_rootFocus.hasPrimaryFocus) _rootFocus.requestFocus();
     });
   }
-
+  
   Future<void> _loadItems() async {
     setState(() => _loading = true);
     try {
-      // Adjust method name if your service uses a different API.
-      final service = IptvGitService();
-      final data = await service.fetchStreams(); // replace with your method if needed
+       
+       
+      
+      final data = (await DbService.instance).getAllStreams();
       // keep items as dynamic; UI will display sensible fields if present
-      _items = data is List ? List<IptvStreamModel>.from(data) : [];
+      _items = List<IptvStreamModel>.from(data);
       _filtered = List<IptvStreamModel>.from(_items);
     } catch (e) {
       _items = [];
@@ -53,7 +55,6 @@ class _IptvGitListPageState extends State<IptvGitListPage> {
   void _filter(String q) {
     final lower = q.toLowerCase();
     _filtered = _items.where((it) {
-      if (it == null) return false;
       if (it is String) return it.title.toLowerCase().contains(lower);
       try {
         final name =it.title;

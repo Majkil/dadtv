@@ -16,6 +16,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'models/iptv_category.dart';
 import 'models/iptv_channel_model.dart';
+import 'models/iptv_countries.dart';
 import 'models/iptv_streams_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -189,6 +190,46 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(5, 3850227890706146305),
+    name: 'IptvCountry',
+    lastPropertyId: const obx_int.IdUid(5, 5972756512529464006),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5719105448771380973),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 6317690747607176048),
+        name: 'name',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3021508313401402499),
+        name: 'code',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 6069239099486392256),
+        name: 'languages',
+        type: 30,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 5972756512529464006),
+        name: 'flag',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -229,7 +270,7 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(4, 1233119234780525391),
+    lastEntityId: const obx_int.IdUid(5, 3850227890706146305),
     lastIndexId: const obx_int.IdUid(1, 5466935377735778867),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -253,7 +294,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     retiredRelationUids: const [],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
-    version: 1,
+    version: 1, generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
   );
 
   final bindings = <Type, obx_int.EntityDefinition>{
@@ -488,6 +529,63 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    IptvCountry: obx_int.EntityDefinition<IptvCountry>(
+      model: _entities[3],
+      toOneRelations: (IptvCountry object) => [],
+      toManyRelations: (IptvCountry object) => {},
+      getId: (IptvCountry object) => object.id,
+      setId: (IptvCountry object, int id) {
+        object.id = id;
+      },
+      objectToFB: (IptvCountry object, fb.Builder fbb) {
+        final nameOffset = fbb.writeString(object.name);
+        final codeOffset = fbb.writeString(object.code);
+        final languagesOffset = fbb.writeList(
+          object.languages.map(fbb.writeString).toList(growable: false),
+        );
+        final flagOffset = fbb.writeString(object.flag);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, nameOffset);
+        fbb.addOffset(2, codeOffset);
+        fbb.addOffset(3, languagesOffset);
+        fbb.addOffset(4, flagOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final nameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final codeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final languagesParam = const fb.ListReader<String>(
+          fb.StringReader(asciiOptimization: true),
+          lazy: false,
+        ).vTableGet(buffer, rootOffset, 10, []);
+        final flagParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final object = IptvCountry(
+          id: idParam,
+          name: nameParam,
+          code: codeParam,
+          languages: languagesParam,
+          flag: flagParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -614,5 +712,33 @@ class IptvChannelModel_ {
   /// See [IptvChannelModel.website].
   static final website = obx.QueryStringProperty<IptvChannelModel>(
     _entities[2].properties[10],
+  );
+}
+
+/// [IptvCountry] entity fields to define ObjectBox queries.
+class IptvCountry_ {
+  /// See [IptvCountry.id].
+  static final id = obx.QueryIntegerProperty<IptvCountry>(
+    _entities[3].properties[0],
+  );
+
+  /// See [IptvCountry.name].
+  static final name = obx.QueryStringProperty<IptvCountry>(
+    _entities[3].properties[1],
+  );
+
+  /// See [IptvCountry.code].
+  static final code = obx.QueryStringProperty<IptvCountry>(
+    _entities[3].properties[2],
+  );
+
+  /// See [IptvCountry.languages].
+  static final languages = obx.QueryStringVectorProperty<IptvCountry>(
+    _entities[3].properties[3],
+  );
+
+  /// See [IptvCountry.flag].
+  static final flag = obx.QueryStringProperty<IptvCountry>(
+    _entities[3].properties[4],
   );
 }

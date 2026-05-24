@@ -2,14 +2,19 @@
 import 'dart:convert';
 import 'package:objectbox/objectbox.dart';
 
+import '../objectbox.g.dart';
 
+@Entity()
 class IptvCountry {
+  @Id()
+  int id;
   final String name;
   final String code;
   final List<String> languages;
   final String flag;
 
-  const IptvCountry({
+  IptvCountry({
+    this.id = 0,
     required this.name,
     required this.code,
     required this.languages,
@@ -17,12 +22,14 @@ class IptvCountry {
   });
 
   IptvCountry copyWith({
+    int? id,
     String? name,
     String? code,
     List<String>? languages,
     String? flag,
   }) {
     return IptvCountry(
+      id: id ?? this.id,
       name: name ?? this.name,
       code: code ?? this.code,
       languages: languages ?? this.languages,
@@ -32,6 +39,7 @@ class IptvCountry {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'code': code,
       'languages': languages,
@@ -41,6 +49,7 @@ class IptvCountry {
 
   factory IptvCountry.fromMap(Map<String, dynamic> map) {
     return IptvCountry(
+      id: map['id'] ?? 0,
       name: map['name'] as String,
       code: map['code'] as String,
       languages: map['languages'] != null
@@ -57,7 +66,7 @@ class IptvCountry {
 
   @override
   String toString() =>
-      'IptvCountry(name: $name, code: $code, languages: $languages, flag: $flag)';
+      'IptvCountry(id: $id, name: $name, code: $code, languages: $languages, flag: $flag)';
 
   @override
   bool operator ==(Object other) {
@@ -74,13 +83,13 @@ class IptvCountry {
 
   @override
   int get hashCode =>
-      name.hashCode ^ code.hashCode ^ languages.hashCode ^ flag.hashCode;
+      id.hashCode ^ name.hashCode ^ code.hashCode ^ languages.hashCode ^ flag.hashCode;
 
   // Example instance from your input
-  static const IptvCountry canada = IptvCountry(
+  static IptvCountry canada = IptvCountry(
     name: 'Canada',
     code: 'CA',
-    languages: const ['eng', 'fra'],
+    languages: ['eng', 'fra'],
     flag: '🇨🇦',
   );
 }

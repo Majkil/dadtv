@@ -14,25 +14,8 @@ import '../objectbox.g.dart';
 // This generates `objectbox.g.dart` used to open the store.
 
 class DbService {
-  DbService._internal();
-
-  late final Store _store;
-  static final DbService instance = DbService._internal();
-
-  DbService._create(this._store) {
-    _channelsBox = Box<IptvChannelModel>(_store);
-    _streamsBox = Box<IptvStreamModel>(_store);
-    _countriesBox = Box<IptvCountry>(_store);
-    _categoryBox = Box<IptvCategoryModel>(_store);
-    _favoritesBox = Box<IptvStreamModel>(_store);
-  }
-
-  static Future<DbService> create() async {
-    final docsDir = await getApplicationDocumentsDirectory();
-    final store = await openStore(directory: p.join(docsDir.path, "obx-tv"));
-
-    return DbService._create(store);
-  }
+  static Store? _store;
+  static DbService? _instance;
 
   // Add any additional
   late final Box<IptvChannelModel> _channelsBox;
@@ -41,15 +24,48 @@ class DbService {
   late final Box<IptvCategoryModel> _categoryBox;
   late final Box<IptvCountry> _countriesBox;
 
-  // Channels
-  List<IptvChannelModel> getAllChannels() => _channelsBox.getAll();
+  DbService._create() {
+    _channelsBox = Box<IptvChannelModel>(_store!);
+    _streamsBox = Box<IptvStreamModel>(_store!);
+    _countriesBox = Box<IptvCountry>(_store!);
+    _categoryBox = Box<IptvCategoryModel>(_store!);
+    _favoritesBox = Box<IptvStreamModel>(_store!);
+  }
 
+  static Future<void> _initialize() async {
+    if (_store == null) {
+      final docsDir = await getApplicationDocumentsDirectory();
+      _store = await openStore(directory: p.join(docsDir.path, "obx-tv"));
+    }
+  }
+
+  static Future<DbService> get instance async {
+    await _initialize();
+    _instance ??= DbService._create();
+    return _instance!;
+  }
+
+  
+  void clear(){
+    _channelsBox.removeAll();
+    _streamsBox.removeAll();
+    _categoryBox.removeAll();
+    _favoritesBox.removeAll();
+    _countriesBox.removeAll();
+  }
+  // Channels
+  List<IptvChannelModel> getAllChannels() {
+    return _channelsBox.getAll();
+  }
+  List<IptvCategoryModel> getAllCategories(){
+    return _categoryBox.getAll();
+  }
   Future<List<IptvChannelModel>> getChannelsByCountry(String country) async {
     QueryBuilder<IptvChannelModel> query = _channelsBox.query(
       IptvChannelModel_.country.equals(country),
     );
     var channels = query.build().find();
-  
+
     return channels;
   }
 
@@ -66,8 +82,8 @@ class DbService {
   }
 
   void deleteAllChannels() {
-    final ids = _channelsBox.getAll().map((e) => e.id).toList();
-    _channelsBox.removeMany(ids);
+    // final ids = _channelsBox.getAll().map((e) => e.id).toList();
+    _channelsBox.removeAll();
   }
 
   // Streams
@@ -78,9 +94,10 @@ class DbService {
   }
 
   void deleteAllStreams() {
-    final ids = _streamsBox.getAll().map((e) => e.id).toList();
-    _streamsBox.removeMany(ids);
+    // final ids = _streamsBox.getAll().map((e) => e.id).toList();
+    _streamsBox.removeAll();
   }
+
 
   // Favorites
   List<IptvStreamModel> getFavorites() => _favoritesBox.getAll();
@@ -90,7 +107,7 @@ class DbService {
   }
 
   void deleteAllFavourites() {
-    final ids = _favoritesBox.getAll().map((e) => e.id).toList();
-    _favoritesBox.removeMany(ids);
+    // final ids = _favoritesBox.getAll().map((e) => e.id).toList();
+    _favoritesBox.removeAll();
   }
 }

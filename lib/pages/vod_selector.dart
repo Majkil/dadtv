@@ -63,7 +63,7 @@ class VoDPreviewTile extends StatelessWidget {
       required this.canPlay,
       this.startDateTime});
 
-  getOrientationDependantTile(context) {
+  Row getOrientationDependantTile(context) {
     var orientation = MediaQuery.of(context).orientation;
 
     if (orientation == Orientation.landscape) {
@@ -211,7 +211,7 @@ class VoDPreviewTile extends StatelessWidget {
     );
   }
 
-  handlePress(context) {
+  void handlePress(context) {
     GoRouter.of(context).push('/play', extra: {'url': videoUrl});
   }
 }

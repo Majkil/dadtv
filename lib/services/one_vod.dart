@@ -18,7 +18,7 @@ class OneVoDService extends ChangeNotifier {
         value.data['episodes'].map((e) => Episode.fromMap(e))));
   }
 
-  getToday() {
+  void getToday() {
     getDayEpisodes(DateTime.now())
         .then((value) => episodes.value.addAll(value));
   }

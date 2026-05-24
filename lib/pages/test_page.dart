@@ -1,5 +1,4 @@
 import 'package:dadtv/components/big_buttons.dart';
-import 'package:dadtv/services/db_service.dart';
 import 'package:dadtv/services/iptv_git_service.dart';
 import 'package:flutter/material.dart';
 
@@ -18,13 +17,13 @@ class _TestPageState extends State<TestPage> {
         children: [
           ActionButton(
             onPressed: () {
-              IptvGitService().refreshData()
+              IptvGitService().refreshData();
             },
             btnText: 'Refresh Database',
           ),
-          StreamBuilder(stream:  IptvGitService().refreshData(), builder: (context, snapshot) {
-            return Text( "${snapshot.data}");
-          },)
+          // StreamBuilder(stream:  IptvGitService().refreshData(), builder: (context, snapshot) {
+          //   return Text( "${snapshot.data}");
+          // },)
                  
           
           

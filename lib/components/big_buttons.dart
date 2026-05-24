@@ -10,17 +10,27 @@ class BigButton extends StatelessWidget {
   final String text;
   final String url;
   final String? imgUrl;
+  final Color? color;
+  final Function()? onPressed;
 
-  const BigButton(
-      {super.key, required this.text, required this.url, this.imgUrl});
+  const BigButton({
+    super.key,
+    required this.text,
+    required this.url,
+    this.imgUrl,
+    this.color,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: () => handlePress(context),
+      onPressed: () => {
+        if (onPressed != null) {onPressed!()!} else {handlePress(context)},
+      },
       clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      color: Colors.redAccent,
+      color: color ?? Colors.redAccent,
       textColor: Colors.black,
       focusColor: Colors.amber,
       child: Center(
@@ -33,38 +43,45 @@ class BigButton extends StatelessWidget {
                         ? SvgPicture.network(imgUrl!)
                         : Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30)),
-                            clipBehavior: Clip.hardEdge,
-                            child: CachedNetworkImage(
-                              imageUrl: imgUrl!,
+                              borderRadius: BorderRadius.circular(30),
                             ),
+                            clipBehavior: Clip.hardEdge,
+                            child: CachedNetworkImage(imageUrl: imgUrl!),
                           ),
                     Text(
                       text,
-                      style: GoogleFonts.robotoCondensed().copyWith(
-                          color: Colors.white,
-                          fontSize: ResponsiveSizer.of(context).fontSize(2)),
-                    )
+                      style: 
+                      GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontSize: text.length < 10
+                            ? ResponsiveSizer.of(context).fontSize(2)
+                            : ResponsiveSizer.of(context).fontSize(0.5),
+                      ),
+                    ),
                   ],
                 ),
               )
             : Text(
                 text,
-                style: GoogleFonts.robotoCondensed().copyWith(
-                    fontSize: ResponsiveSizer.of(context).fontSize(4)),
+                style: GoogleFonts.roboto(
+                  fontSize: ResponsiveSizer.of(context).fontSize(4),
+                ),
               ),
       ),
     );
   }
 
-  handlePress(context) {
+  void handlePress(context) {
     GoRouter.of(context).push('/play', extra: {'url': url});
   }
 }
 
 class ActionButton extends StatelessWidget {
-  const ActionButton(
-      {super.key, required this.onPressed, required this.btnText});
+  const ActionButton({
+    super.key,
+    required this.onPressed,
+    required this.btnText,
+  });
   final Function() onPressed;
   final String btnText;
 
@@ -86,14 +103,58 @@ class ActionButton extends StatelessWidget {
               }
             }
           },
+          // child: BigButton(text: btnText, url: url)
           child: MaterialButton(
             focusColor: Colors.amber,
             color: Colors.red.shade100,
             elevation: 5,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
             onPressed: () => onPressed(),
             child: Text(btnText),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class UiNavButton extends StatelessWidget {
+  final String url;
+  final String text;
+  final Color? color;
+
+  const UiNavButton({
+    super.key,
+    required this.url,
+    required this.text,
+    this.color,
+  });
+  @override
+  Widget build(BuildContext context) {
+    var isLandscape =
+        MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      height: buttonHeight(context, isLandscape),
+      width: buttonHeight(context, isLandscape),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: KeyboardListener(
+          onKeyEvent: (key) {
+            if (key.runtimeType == RawKeyUpEvent) {
+              if (key.logicalKey == LogicalKeyboardKey.select) {
+                GoRouter.of(context).push(url);
+              }
+            }
+          },
+          focusNode: FocusNode(skipTraversal: true),
+          child: BigButton(
+            url:url,
+            onPressed: () => GoRouter.of(context).push(url),
+            text: text,
+            color: color,
           ),
         ),
       ),

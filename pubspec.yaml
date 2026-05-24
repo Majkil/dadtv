@@ -40,18 +40,19 @@ dependencies:
   provider: ^6.0.5
   go_router: ^17.0.0
   pigeon: ^26.1.2
+  http: ^1.6.0
   intl: ^0.20.2
-  google_fonts: ^6.3.2
+  google_fonts: ^8.1.0
   flutter_svg: ^2.0.5
   shared_preferences: ^2.1.1
   cached_network_image: ^3.2.3
   ota_update: ^7.0.2
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.1.0
   collection: ^1.19.1
   wakelock_plus: ^1.4.0
   objectbox: ^5.0.2
   objectbox_flutter_libs: any
-  flat_buffers: ^23.5.26
+  flat_buffers: ^25.9.23
 
 
 dev_dependencies:

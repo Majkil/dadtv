@@ -43,13 +43,13 @@ class IptvChannelModel {
   });
 
   factory IptvChannelModel.fromMap(Map<String, dynamic> map) {
-    List<String> _toStringList(dynamic v) {
+    List<String> toStringList(dynamic v) {
       if (v == null) return [];
       if (v is List) return v.map((e) => e?.toString() ?? '').where((s) => s.isNotEmpty).toList();
       return [v.toString()];
     }
 
-    DateTime? _parseDate(dynamic v) {
+    DateTime? parseDate(dynamic v) {
       if (v == null) return null;
       if (v is DateTime) return v;
       try {
@@ -62,11 +62,11 @@ class IptvChannelModel {
     return IptvChannelModel(
       uid: map['id']?.toString() ?? '',
       name: map['name']?.toString() ?? '',
-      altNames: _toStringList(map['alt_names'] ?? map['altNames']),
+      altNames: toStringList(map['alt_names'] ?? map['altNames']),
       network: map['network']?.toString(),
-      owners: _toStringList(map['owners']),
+      owners: toStringList(map['owners']),
       country: map['country']?.toString(),
-      categories: _toStringList(map['categories']),
+      categories: toStringList(map['categories']),
       isNsfw: map['is_nsfw'] is bool ? map['is_nsfw'] : (map['isNsfw'] == null ? false : (map['is_nsfw'] ?? map['isNsfw']).toString().toLowerCase() == 'true'),
       // launched: _parseDate(map['launched']),
       // closed: _parseDate(map['closed']),

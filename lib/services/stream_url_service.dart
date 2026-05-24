@@ -20,7 +20,7 @@ class StreamUrlService extends ChangeNotifier {
     //getNet();
     //getItalian();
   }
-  getTVM() {
+  void getTVM() {
     var dio = Dio();
 
     dio.get('https://tvmi.mt/live/3').then((value) {
@@ -55,7 +55,7 @@ class StreamUrlService extends ChangeNotifier {
     });
   }
 
-  getOne() {
+  void getOne() {
     streams.value.add(StreamSource(
         title: "one",
         url:
@@ -70,7 +70,7 @@ class StreamUrlService extends ChangeNotifier {
     notifyListeners();
   }
 
-  getNet() {
+  void getNet() {
     var dio = Dio();
     dio.get('https://netondemand.mt/?autoPlay=1').then((value) {
       var temp = value.data as String;

@@ -67,21 +67,21 @@ class _OneVodDayPickerState extends State<OneVodDayPicker> {
     );
   }
 
-  yesterday() {
+  void yesterday() {
     setState(() {
       currentDay = currentDay.subtract(const Duration(days: 1));
       getEpisodes();
     });
   }
 
-  tomorrow() {
+  void tomorrow() {
     setState(() {
       currentDay = currentDay.add(const Duration(days: 1));
       getEpisodes();
     });
   }
 
-  handleKeyEvent(RawKeyEvent event) {
+  void handleKeyEvent(RawKeyEvent event) {
     if (event.runtimeType == RawKeyUpEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         yesterday();
@@ -92,7 +92,7 @@ class _OneVodDayPickerState extends State<OneVodDayPicker> {
     }
   }
 
-  getEpisodes() {
+  void getEpisodes() {
     service.getDayEpisodes(currentDay).then((value) => {
           setState(
             () {

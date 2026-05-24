@@ -1,6 +1,8 @@
 import 'package:dadtv/app_lifecycle/app_lifecycle.dart';
 import 'package:dadtv/helpers/size_helper.dart';
+import 'package:dadtv/pages/home_page.dart';
 import 'package:dadtv/pages/iptv_git_list_page.dart';
+import 'package:dadtv/pages/iptv_sync_page.dart';
 
 import 'package:dadtv/pages/player.dart';
 import 'package:dadtv/pages/select_stream.dart';
@@ -19,7 +21,7 @@ late DbService dbService;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  dbService = await DbService.create();
+  dbService = await DbService.instance;
   runApp(const MyApp());
   // var tempUrl = UpdaterService().checkForNewVersion();
 }
@@ -94,7 +96,18 @@ GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'iptv',
           builder: (context, state) {
+            return IptvSyncPage();
+          },
+        ),GoRoute(
+          path: 'iptv/all',
+          builder: (context, state) {
             return IptvGitListPage();
+          },
+        ),
+        GoRoute(
+          path: 'home',
+          builder: (context, state) {
+            return StreamsCategories();
           },
         ),
       ],
@@ -116,7 +129,7 @@ ButtonStyle appButtonStyle(context) => ButtonStyle(
   backgroundColor: WidgetStateProperty.all<Color>(Colors.redAccent.shade200),
   overlayColor: WidgetStateProperty.all<Color>(Colors.amber),
   textStyle: WidgetStateProperty.all<TextStyle>(
-    GoogleFonts.robotoCondensed().copyWith(
+    GoogleFonts.roboto(
       fontSize: ResponsiveSizer.of(context).fontSize(4),
       fontWeight: FontWeight.bold,
     ),

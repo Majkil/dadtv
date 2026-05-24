@@ -6,7 +6,51 @@ import 'package:dadtv/models/iptv_channel_model.dart';
 import 'package:dadtv/models/iptv_countries.dart';
 import 'package:dadtv/models/iptv_streams_model.dart';
 import 'package:dadtv/services/db_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
+// Top-level functions for compute
+List<dynamic> _decodeJsonList(String body) {
+  final decoded = jsonDecode(body);
+  if (decoded is! List) {
+    throw Exception('Unexpected JSON format: expected a list');
+  }
+  return decoded;
+}
+
+Map<String, dynamic> _jsonObject(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  if (value is Map) {
+    return Map<String, dynamic>.from(value);
+  }
+  throw Exception('Unexpected JSON item format: expected an object');
+}
+
+List<IptvStreamModel> _parseStreams(String body) {
+  return _decodeJsonList(body)
+      .map<IptvStreamModel>((e) => IptvStreamModel.fromJson(_jsonObject(e)))
+      .toList();
+}
+
+List<IptvChannelModel> _parseChannels(String body) {
+  return _decodeJsonList(body)
+      .map<IptvChannelModel>((e) => IptvChannelModel.fromMap(_jsonObject(e)))
+      .toList();
+}
+
+List<IptvCategoryModel> _parseCategories(String body) {
+  return _decodeJsonList(body)
+      .map<IptvCategoryModel>((e) => IptvCategoryModel.fromMap(_jsonObject(e)))
+      .toList();
+}
+
+List<IptvCountry> _parseCountries(String body) {
+  return _decodeJsonList(body)
+      .map<IptvCountry>((e) => IptvCountry.fromMap(_jsonObject(e)))
+      .toList();
+}
 
 /// Service to fetch the list of channels from iptv-org channels.json.
 class IptvGitService {
@@ -17,22 +61,23 @@ class IptvGitService {
 
   IptvGitService({http.Client? client}) : _client = client ?? http.Client();
 
-  Stream<int> refreshData() async* {
+  Future<void> refreshData() async {
+    final db = await DbService.instance;
+
+    var categories = await fetchCategories();
+    db.addAllCategories(categories);
+
+    var countries = await fetchCountries();
+    db.addAllCountries(countries);
+
     var streams = await fetchStreams();
-    yield 1;
-    DbService.instance.addAllStreams(streams);
-    yield 2;
+
+    db.addAllStreams(streams);
 
     var channels = await fetchChannels();
-    yield 3;
-    DbService.instance.addAllChannels(channels);
-    yield 4;
 
-    DbService.instance.addAllCategories(await fetchCategories());
-    yield 5;
-    DbService.instance.addAllCountries(await fetchCountries());
-    yield 6;
-    yield 0;
+    db.addAllChannels(channels);
+
   }
 
   Future<List<IptvStreamModel>> fetchStreams({
@@ -42,18 +87,10 @@ class IptvGitService {
     final response = await _client.get(uri).timeout(timeout);
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to load channels: ${response.statusCode}');
+      throw Exception('Failed to load streams: ${response.statusCode}');
     }
 
-    final decoded = jsonDecode(response.body);
-    if (decoded is! List) {
-      throw Exception('Unexpected JSON format: expected a list');
-    }
-
-    return decoded
-        .whereType<Map<String, dynamic>>()
-        .map((e) => IptvStreamModel.fromJson(e))
-        .toList();
+    return compute(_parseStreams, response.body);
   }
 
   Future<List<IptvCategoryModel>> fetchCategories({
@@ -61,7 +98,10 @@ class IptvGitService {
   }) async {
     final uri = Uri.parse("https://iptv-org.github.io/api/categories.json");
     final response = await _client.get(uri).timeout(timeout);
-    return jsonDecode(response.body).map((e) => IptvCategoryModel.fromJson(e));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load categories: ${response.statusCode}');
+    }
+    return compute(_parseCategories, response.body);
   }
 
   Future<List<IptvCountry>> fetchCountries({
@@ -69,7 +109,10 @@ class IptvGitService {
   }) async {
     final uri = Uri.parse("https://iptv-org.github.io/api/countries.json");
     final response = await _client.get(uri).timeout(timeout);
-    return jsonDecode(response.body).map((e) => IptvCountry.fromJson(e));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load countries: ${response.statusCode}');
+    }
+    return compute(_parseCountries, response.body);
   }
 
   /// Fetches the channels list and returns a list of IptvModel.
@@ -84,15 +127,7 @@ class IptvGitService {
       throw Exception('Failed to load channels: ${response.statusCode}');
     }
 
-    final decoded = jsonDecode(response.body);
-    if (decoded is! List) {
-      throw Exception('Unexpected JSON format: expected a list');
-    }
-
-    return decoded
-        .whereType<Map<String, dynamic>>()
-        .map((e) => IptvChannelModel.fromJson(jsonEncode(e)))
-        .toList();
+    return compute(_parseChannels, response.body);
   }
 
   /// Dispose the internal http client if you created it in this service.
